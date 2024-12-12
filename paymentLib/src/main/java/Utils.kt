@@ -1,11 +1,12 @@
 import Enum.DukptError
 import Enum.DukptKeyType
 import Enum.DukptVersion
-import com.lib.payment.Algorithm.Dukpt
+import Enum.KeyType
+import com.lib.payment.Algorithm.DukptAesOutput
 import com.lib.payment.Algorithm.DukptInput
 import com.lib.payment.Algorithm.DukptResult
-import javax.crypto.Cipher
-import javax.crypto.spec.SecretKeySpec
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 
 object Utils {
 
@@ -57,7 +58,7 @@ object Utils {
         }
 
         when (dukptVersion) {
-            DukptVersion.DUKPT_2009 -> {
+            DukptVersion.DUKPT_TDES -> {
                 when {
                     dukptKsn.size != 10 -> {
                         return DukptResult.Error(DukptError.INVALID_KSN_LENGTH.error)
@@ -75,6 +76,70 @@ object Utils {
         return DukptResult.Success(
             DukptInput()
         )
+    }
+
+    fun intToBytes(x: Long): ByteArray {
+        val buffer = ByteBuffer.allocate(java.lang.Long.SIZE / java.lang.Byte.SIZE)
+        buffer.order(ByteOrder.BIG_ENDIAN)
+        buffer.putLong(x)
+        val longArray = buffer.array()
+        val intArray = ByteArray(Integer.SIZE / java.lang.Byte.SIZE)
+        System.arraycopy(longArray, intArray.size, intArray, 0, intArray.size)
+        return intArray
+    }
+    fun shiftRight(byteArray: ByteArray, shiftBitCount: Int): ByteArray {
+        val shiftMod = shiftBitCount % 8
+        val carryMask = (0xFF shl (8 - shiftMod)).toByte()
+        val offsetBytes = (shiftBitCount / 8)
+
+        var sourceIndex: Int
+        for (i in byteArray.indices.reversed()) {
+            sourceIndex = i - offsetBytes
+            if (sourceIndex < 0) {
+                byteArray[i] = 0
+            } else {
+                val src = byteArray[sourceIndex]
+                var dst = ((0xff and src.toInt()) ushr shiftMod).toByte()
+                if (sourceIndex - 1 >= 0) {
+                    dst =
+                        (dst.toInt() or (byteArray[sourceIndex - 1].toInt() shl (8 - shiftMod) and carryMask.toInt())).toByte()
+                }
+                byteArray[i] = dst
+            }
+        }
+        return byteArray
+    }
+    fun validateDukptAesParameters(
+        dukptKey: ByteArray,
+        dukptKsn: ByteArray,
+        keyType: KeyType
+    ): DukptResult<DukptAesOutput> {
+        // Validate KSN
+        if (dukptKsn.isEmpty()) {
+            return DukptResult.Error(DukptError.EMPTY_KEY.error)
+        }
+        if (dukptKsn.size !in listOf(10, 12)) {
+            return DukptResult.Error(DukptError.INVALID_KSN_LENGTH.error)
+        }
+
+        // Validate Key
+        if (dukptKey.isEmpty()) {
+            return DukptResult.Error(DukptError.EMPTY_KEY.error)
+        }
+
+        val expectedKeyLength = when (keyType) {
+            KeyType._AES128 -> 16
+            KeyType._AES192 -> 24
+            KeyType._AES256 -> 32
+            else -> null // Unsupported key type
+        }
+
+        if (expectedKeyLength == null || dukptKey.size != expectedKeyLength) {
+            return DukptResult.Error(DukptError.INVALID_KEY_LENGTH.error)
+        }
+
+        // If all validations pass, return success
+        return DukptResult.Success(DukptAesOutput())
     }
 
 }

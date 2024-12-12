@@ -2,9 +2,8 @@ package com.lib.paymentlibrary
 
 import Enum.DukptKeyType
 import Enum.DukptVersion
-import Utils.byteArrayToHexString
+import Enum.KeyType
 import Utils.hexStringToByteArray
-import Utils.trim
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -21,9 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lib.payment.Algorithm.Dukpt
+import com.lib.payment.Algorithm.DukptAes
 import com.lib.paymentlibrary.ui.theme.PaymentLibraryTheme
-import javax.crypto.Cipher
-import javax.crypto.spec.SecretKeySpec
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,28 +51,24 @@ fun TestButton(context: Context, modifier: Modifier = Modifier) {
     ) {
         Button(
             onClick = {
-                val bdkHex = "0123456789ABCDEFFEDCBA9876543210" // 16-byte BDK
-                val ksnHex = "FFFF9876543210E00004" // KSN (using first 8 bytes)
+                val bdkHex = "FEDCBA9876543210F1F1F1F1F1F1F1F1" // 16-byte BDK
+                val ksnHex = "12345678901234560001" // KSN (using first 8 bytes)
 
                 // Convert BDK and KSN from Hex to ByteArray
                 val bdk = hexStringToByteArray(bdkHex)
                 val ksn = hexStringToByteArray(ksnHex)
 
-                val dukpt = Dukpt(context)
-                val dukptInt = dukpt.initializeDukpt(
-                    dukptVersion = DukptVersion.DUKPT_2009,
-                    keyType = DukptKeyType.IPEK,
-                    key = bdk,
-                    ksn = ksn
+                val dukpt = DukptAes()
+                val dukptInt = dukpt.initializeDukptAes(
+                    ksn,bdk,KeyType._AES128,DukptVersion.DUKPT_AES,KeyType._AES128
                 )
                 if(dukptInt.isError()){
                     Log.e("Dukpt","isError ${dukptInt.toError()}")
                 }
                 if(dukptInt.isSuccess()){
-                    Log.e("Dukpt","isSuccess ${dukptInt.toData()}")
-                    var result = dukpt.encryptData(hexStringToByteArray("1234"))
-                    Log.e("Dukpt","encrypted Data = $result")
+                    Log.e("Dukpt","isError ${dukptInt.toData()}")
                 }
+
 
             },
             modifier = Modifier

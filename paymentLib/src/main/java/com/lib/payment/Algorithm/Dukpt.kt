@@ -39,8 +39,8 @@ class Dukpt(context: Context):  IDukpt{
             return validationResult
         }
         return when (dukptVersion) {
-            DukptVersion.DUKPT_2009 -> dukptVersion2009(keyType, key, ksn)
-            DukptVersion.DUKPT_2017 -> TODO()
+            DukptVersion.DUKPT_TDES -> dukptVersion2009(keyType, key, ksn)
+            DukptVersion.DUKPT_AES -> TODO()
             DukptVersion.DUKPT_2017_C -> TODO()
             DukptVersion.UNKNOWN -> TODO()
             null -> TODO()
