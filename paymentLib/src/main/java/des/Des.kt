@@ -1,5 +1,6 @@
 package des
 
+import Utils.asciiToBcd
 import Utils.toHexString
 import android.os.Build
 import android.util.Log
@@ -52,12 +53,18 @@ class Des(private val desType: DesType): IDes {
         }
 
 
-        val keySpec = DESKeySpec(key?.toByteArray())
+        val keySpec = DESKeySpec(key?.asciiToBcd())
         val keyFactory = SecretKeyFactory.getInstance(algorithm)
         val desKey = keyFactory.generateSecret(keySpec)
 
         val cipher = Cipher.getInstance(transformation)
-        cipher.init(Cipher.ENCRYPT_MODE, desKey, iv)
+
+        if(encryptionMode == EncryptionMode.CBC){
+            cipher.init(Cipher.ENCRYPT_MODE, desKey, iv)
+        }else{
+            cipher.init(Cipher.ENCRYPT_MODE, desKey)
+        }
+
         val encryptedData = cipher.doFinal(data?.toByteArray()).toHexString()
         Log.d("Des","Encrypted Data = $encryptedData")
 
@@ -102,6 +109,12 @@ class Des(private val desType: DesType): IDes {
                 DesError.INVALID_ENCRYPTION_MODE.name
             )
 
+        }
+        if(!(encryptionMode == EncryptionMode.CBC || encryptionMode == EncryptionMode.ECB)){
+            return DesResult.Error(
+                DesError.UNSUPPORTED_ENCRYPTION_MODE.ordinal,
+                DesError.UNSUPPORTED_ENCRYPTION_MODE.name
+            )
         }
         return DesResult.Success(DesOutput())
 

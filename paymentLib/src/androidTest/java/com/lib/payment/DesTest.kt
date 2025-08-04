@@ -87,7 +87,31 @@ class DesTest {
     }
 
     @Test
-    fun testDesEncryption_with_correctData(){
+    fun testDesEncryption_with_unsupportedEncryptionMode(){
+        var output: Boolean?
+        var errorCode: Int? = 0
+
+        val des = Des(DesType.DES)
+        val data = "12345678"
+        val key = "2b71790f9fa47810"
+        val paddingMode = PaddingMode.NONE
+        val encryptionMode = EncryptionMode.OFB_64
+
+        val result = des.encrypt(data = data, key = key, paddingMode = paddingMode, encryptionMode = encryptionMode)
+
+        if (result.isError()) {
+            output = true
+            errorCode = result.toError().errorCode
+        } else {
+            output = false
+        }
+
+        assertTrue("Expected output to be true when encryption fails with unsupported encryptionMode",output )
+        assertNotNull("Error code should not be null",errorCode )
+    }
+
+    @Test
+    fun testDesEncryption_with_correctData_ecb_mode(){
         var output: Boolean?
 
         val des = Des(DesType.DES)
@@ -96,7 +120,33 @@ class DesTest {
         val paddingMode = PaddingMode.NONE
         val encryptionMode = EncryptionMode.ECB
         var encryptionResult: String?
-        var expectedData = "4242424242424242"
+        var expectedData = "2b71790f9fa47810"
+
+        val result = des.encrypt(data = data, key = key, paddingMode = paddingMode, encryptionMode = encryptionMode)
+
+        if (result.isError()) {
+            output = false
+            encryptionResult = ""
+        } else {
+            output = true
+            encryptionResult = result.toData().encryptedData
+        }
+
+        assertTrue("Expected output to be true when encryption Success",output )
+        assertEquals(expectedData,encryptionResult)
+    }
+
+    @Test
+    fun testDesEncryption_with_correctData_cbc_mode(){
+        var output: Boolean?
+
+        val des = Des(DesType.DES)
+        val data = "12345678"
+        val key = "C1D0F8FB4958670D"
+        val paddingMode = PaddingMode.NONE
+        val encryptionMode = EncryptionMode.CBC
+        var encryptionResult: String?
+        var expectedData = "2b71790f9fa47810"
 
         val result = des.encrypt(data = data, key = key, paddingMode = paddingMode, encryptionMode = encryptionMode)
 
