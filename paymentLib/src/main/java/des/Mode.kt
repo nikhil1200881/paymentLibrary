@@ -1,6 +1,6 @@
 package des
 
-enum class EncryptionMode(val encryptionMode: Int, val encryptionModeName: String){
+enum class Mode(val mode: Int, val modeName: String){
     ECB(0,"ECB"),
     CBC(1,"CBC"),
     CFB_8(2,"CFB8"),

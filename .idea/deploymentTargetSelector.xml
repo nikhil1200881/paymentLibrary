@@ -5,19 +5,19 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testEncryption_with_unknownDesType()">
+      <SelectionState runConfigName="testDecryption_with_IncorrectPaddingMode()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
       <SelectionState runConfigName="DesTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testDesEncryption_with_correctData()">
+      <SelectionState runConfigName="testDesDecryption_with_incorrectDecryptionData()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testDesEncryption_with_unsupportedEncryptionMode()">
+      <SelectionState runConfigName="testDesEncryptionDecryption_forAllPaddingModes()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testDesEncryption_with_correctData_cbc_mode()">
+      <SelectionState runConfigName="testDesEncryption_with_correctData_ecb_mode()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

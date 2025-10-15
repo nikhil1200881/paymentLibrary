@@ -7,5 +7,10 @@ enum class DesError(desError: Int, errorMessage: String) {
     INVALID_PADDING_MODE(2, "Invalid Padding Mode"),
     INVALID_ENCRYPTION_MODE(3, "Invalid Encryption Mode"),
     UNSUPPORTED_ENCRYPTION_MODE(4, "Unsupported Encryption Mode"),
-
+    UNSUPPORTED_PADDING_MODE(5,"Unsupported Padding Mode for DES-ECB encryption"),
+    INVALID_IV(6,"Invalid IV"),
+    UNSUPPORTED_ALGORITHM(7,"Unsupported Algorithm"),
+    ILLEGAL_BLOCK_SIZE(8,"Illegal Block Size"),
+    BAD_PADDING(9,"Bad Padding"),
+    UNKNOWN_ERROR(10,"Unknown Error")
 }
