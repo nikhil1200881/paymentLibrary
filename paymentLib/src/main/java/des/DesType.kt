@@ -1,7 +1,7 @@
 package des
 
-enum class DesType(val desType: Int) {
-    DES(0),
-    TDES(1),
-    UNKNOWN(-1)
+enum class DesType(val desType: Int, val desName: String) {
+    DES(0,"DES"),
+    TDES(1,"DESede"),
+    UNKNOWN(-1, "Unknown")
 }

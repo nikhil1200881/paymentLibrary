@@ -5,19 +5,19 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testDecryption_with_IncorrectPaddingMode()">
+      <SelectionState runConfigName="TdesTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="DesTest">
+      <SelectionState runConfigName="testTripleDESEncryption_AllModes_AllPaddings()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testDesDecryption_with_incorrectDecryptionData()">
+      <SelectionState runConfigName="testDesEncryption_with_ANSI_ECB()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testDesEncryptionDecryption_forAllPaddingModes()">
+      <SelectionState runConfigName="testTripleDESEncryption_AllModes_AllPaddings_keySize_24byte()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testDesEncryption_with_correctData_ecb_mode()">
+      <SelectionState runConfigName="testTripleDESEncryption_AllModes_AllPaddings_keySize_16byte()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
