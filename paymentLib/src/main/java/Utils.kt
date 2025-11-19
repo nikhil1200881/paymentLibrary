@@ -77,4 +77,8 @@ object Utils {
         )
     }
 
+     fun String.asciiToBcd(): ByteArray =
+        chunked(2).map { it.toInt(16).toByte() }.toByteArray()
+
+
 }
